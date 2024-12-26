@@ -1531,7 +1531,7 @@ int melee_attack::player_apply_weapon_bonuses(int damage)
         }
 
         // Demonspawn get a damage bonus for demonic weapons.
-        if (you.species == SP_DEMONSPAWN && is_demonic(*weapon))
+        if ((you.species == SP_DEMONSPAWN || you.species == SP_EFREET) && is_demonic(*weapon))
             damage += random2(3);
     }
 
@@ -2062,8 +2062,12 @@ void melee_attack::calc_elemental_brand_damage( beam_type flavour,
                                                 int res,
                                                 const char *verb)
 {
-    special_damage = resist_adjust_damage(defender, flavour, res,
-                                          random2(damage_done) / 2 + 1);
+    if (flavour == BEAM_NAPALM)
+        special_damage = resist_adjust_damage(defender, BEAM_FIRE, res,
+                                              random2(damage_done) + 1);
+    else
+        special_damage = resist_adjust_damage(defender, flavour, res,
+                                              random2(damage_done) / 2 + 1);
 
     if (special_damage > 0 && verb && needs_message)
     {
@@ -2817,6 +2821,13 @@ bool melee_attack::apply_damage_brand()
         res = fire_res_apply_cerebov_downgrade( defender->res_fire() );
         calc_elemental_brand_damage( BEAM_FIRE, res,
                                      defender->is_icy()? "melt" : "burn");
+        defender->expose_to_element(BEAM_FIRE);
+        break;
+
+    case SPWPN_STRONG_FLAMING:
+        res = fire_res_apply_cerebov_downgrade( defender->res_fire() );
+        calc_elemental_brand_damage( BEAM_NAPALM, res,
+                                     defender->is_icy()? "strongly melt" : "scorch");
         defender->expose_to_element(BEAM_FIRE);
         break;
 

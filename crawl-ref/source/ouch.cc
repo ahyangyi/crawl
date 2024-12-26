@@ -446,7 +446,8 @@ static bool _expose_invent_to_element(beam_type flavour, int strength)
                 continue;
             }
 
-            for (int j = 0; j < you.inv[i].quantity; ++j)
+            int tmp = you.inv[i].quantity;
+            for (int j = 0; j < tmp; ++j)
             {
                 if (x_chance_in_y(strength, 100))
                 {
@@ -518,7 +519,8 @@ bool expose_invent_to_innate_fire(int strength)
 
         if (you.inv[i].base_type == target_class)
         {
-            for (int j = 0; j < you.inv[i].quantity; ++j)
+            int tmp = you.inv[i].quantity;
+            for (int j = 0; j < tmp; ++j)
             {
                 if (x_chance_in_y(strength, 100))
                 {

@@ -1386,6 +1386,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_RED_DRACONIAN:
         case SP_MUMMY:
         case SP_VAMPIRE:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1406,6 +1407,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_CENTAUR:
         case SP_RED_DRACONIAN:
         case SP_MUMMY:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1432,6 +1434,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_DEMIGOD:
         case SP_DEMONSPAWN:
         case SP_MUMMY:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1457,6 +1460,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_MUMMY:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1470,6 +1474,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_MUMMY:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_EFREET:
             return (CC_BANNED);
         case SP_GREY_ELF:
         case SP_DEEP_ELF:
@@ -1482,6 +1487,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_NAGA:
         case SP_TROLL:
         case SP_KENKU:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1505,6 +1511,8 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_KENKU:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_EFREET:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1520,6 +1528,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_SPRIGGAN:
         case SP_NAGA:
         case SP_KENKU:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1534,6 +1543,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_NAGA:
         case SP_KENKU:
         case SP_GHOUL:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1547,6 +1557,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_MUMMY:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_EFREET:
             return (CC_BANNED);
         case SP_DEEP_ELF:
         case SP_MERFOLK:
@@ -1556,6 +1567,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_NAGA:
         case SP_OGRE:
         case SP_TROLL:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1578,6 +1590,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_MUMMY:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1605,6 +1618,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_MUMMY:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1626,30 +1640,15 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_OGRE:
         case SP_MINOTAUR:
         case SP_GHOUL:
+        case SP_ABRA:
+        case SP_EFREET:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
         }
 
     case JOB_SEER:
-        switch (speci)
-        {
-        case SP_MOUNTAIN_DWARF:
-        case SP_HILL_ORC:
-        case SP_MERFOLK:
-        case SP_HALFLING:
-        case SP_GNOME:
-        case SP_KOBOLD:
-        case SP_SPRIGGAN:
-        case SP_CENTAUR:
-        case SP_TROLL:
-        case SP_OGRE:
-        case SP_MINOTAUR:
-        case SP_GHOUL:
-            return (CC_RESTRICTED);
-        default:
-            return (CC_UNRESTRICTED);
-        }
+        return (CC_RESTRICTED);
 
     case JOB_CONJURER:
         switch (speci)
@@ -1665,6 +1664,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_MINOTAUR:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1686,6 +1686,9 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_RED_DRACONIAN:
         case SP_GHOUL:
         case SP_MUMMY:
+        case SP_ABRA:
+        case SP_EFREET:
+        case SP_FURBOLG:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1710,6 +1713,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_DEMIGOD:
         case SP_DEMONSPAWN:
         case SP_GHOUL:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1728,6 +1732,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_CENTAUR:
         case SP_TROLL:
         case SP_MINOTAUR:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1758,6 +1763,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_MUMMY:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1785,6 +1791,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_MUMMY:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1803,6 +1810,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_MINOTAUR:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1822,6 +1830,8 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_MINOTAUR:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_ABRA:
+        case SP_EFREET:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1841,6 +1851,8 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_MUMMY:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_ABRA:
+        case SP_EFREET:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1864,6 +1876,8 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_RED_DRACONIAN:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_ABRA:
+        case SP_EFREET:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1884,6 +1898,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_MINOTAUR:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1904,6 +1919,9 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_MUMMY:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_ABRA:
+        case SP_FURBOLG:
+        case SP_EFREET:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1926,6 +1944,9 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_TROLL:
         case SP_MINOTAUR:
         case SP_RED_DRACONIAN:
+        case SP_ABRA:
+        case SP_FURBOLG:
+        case SP_EFREET:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1945,6 +1966,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_MUMMY:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_ABRA:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -1959,7 +1981,9 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_OGRE:
         case SP_MUMMY:
         case SP_GHOUL:
+        case SP_ABRA:
         case SP_FURBOLG:
+        case SP_EFREET:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -2062,6 +2086,7 @@ static char_choice_restriction _book_restriction(startup_book_type booktype)
         case SP_DEMIGOD:
         case SP_DEMONSPAWN:
         case SP_MUMMY:
+        case SP_EFREET:
             return (CC_UNRESTRICTED);
 
         default:
@@ -2088,6 +2113,7 @@ static char_choice_restriction _book_restriction(startup_book_type booktype)
         case SP_DEMIGOD:
         case SP_DEMONSPAWN:
         case SP_MUMMY:
+        case SP_FURBOLG:
             return (CC_UNRESTRICTED);
 
         default:
@@ -2316,6 +2342,8 @@ static char_choice_restriction _weapon_restriction(weapon_type wpn)
             return (CC_UNRESTRICTED);
         if (you.species == SP_VAMPIRE)
             return (CC_RESTRICTED);
+        if (you.species == SP_ABRA)
+            return (CC_UNRESTRICTED);
         // else fall-through
     case WPN_HAND_AXE:
         switch (you.species)
@@ -2333,6 +2361,8 @@ static char_choice_restriction _weapon_restriction(weapon_type wpn)
         case SP_DEMIGOD:
         case SP_DEMONSPAWN:
         case SP_VAMPIRE:
+        case SP_FURBOLG:
+        case SP_EFREET:
             return (CC_UNRESTRICTED);
 
         default:
@@ -2598,6 +2628,7 @@ static char_choice_restriction _religion_restriction(god_type god)
         case SP_MUMMY:
         case SP_GHOUL:
         case SP_VAMPIRE:
+        case SP_EFREET:
             return (CC_BANNED);
         case SP_SLUDGE_ELF:
         case SP_MOUNTAIN_DWARF:
@@ -2830,7 +2861,7 @@ static void _species_stat_init(species_type which_species)
 
     case SP_FURBOLG:            sb =  7; ib =  4; db =  6;      break;  // 17
 
-    case SP_ABRA:               sb =  2; ib = 10; db =  5;      break;  // 17
+    case SP_ABRA:               sb =  3; ib = 10; db =  5;      break;  // 18
     case SP_EFREET:             sb =  8; ib =  6; db =  5;      break;  // 19
 
     case SP_RED_DRACONIAN:
@@ -3903,7 +3934,7 @@ spec_query:
                 continue;
 
             // Dim text for restricted species
-            if (you.char_class == JOB_UNKNOWN
+            if (you.char_class == JOB_UNKNOWN && si != SP_ABRA
                 || _class_allowed(si, you.char_class) == CC_UNRESTRICTED)
             {
                 textcolor(LIGHTGREY);
@@ -4048,7 +4079,8 @@ spec_query:
     bool randrace = (good_randrace || keyn == '*');
     if (randrace)
     {
-        if (you.char_class == JOB_THIEF || you.char_class == JOB_WANDERER)
+        if (you.char_class == JOB_THIEF || you.char_class == JOB_WANDERER
+            || you.char_class == JOB_SEER)
             good_randrace = false;
 
         int index;
@@ -4153,7 +4185,7 @@ job_query:
             // Thief and wanderer are general challenge classes in that there's
             // no species that's unrestricted in combination with them.
             if (you.species == SP_UNKNOWN
-                   && which_job != JOB_THIEF && which_job != JOB_WANDERER
+                   && which_job != JOB_THIEF && which_job != JOB_WANDERER && which_job != JOB_SEER
                 || you.species != SP_UNKNOWN
                    && _class_allowed(you.species, which_job) == CC_UNRESTRICTED)
             {
@@ -4751,7 +4783,8 @@ bool _give_items_skills()
 
         // Set gods.
         if (you.species == SP_DEMONSPAWN || you.species == SP_MUMMY
-            || you.species == SP_GHOUL || you.species == SP_VAMPIRE)
+            || you.species == SP_GHOUL || you.species == SP_VAMPIRE
+            || you.species == SP_EFREET)
         {
             you.religion = GOD_YREDELEMNUL;
         }

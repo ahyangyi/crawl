@@ -1433,6 +1433,6 @@ void manage_efreet_fire_shield()
     // Place fire clouds all around you
     for ( adjacent_iterator ai; ai; ++ai )
         if (!grid_is_solid(grd(*ai)) && env.cgrid(*ai) == EMPTY_CLOUD)
-            if (random2(31) < you.experience_level + 4)
+            if (random2(600) < you.experience_level * you.experience_level)
                 place_cloud( CLOUD_FIRE, *ai, 1 + random2(2), KC_YOU );
 }

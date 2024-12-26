@@ -144,7 +144,9 @@ enum brand_type // equivalent to (you.inv[].special or mitm[].special) % 30
     SPWPN_STAFF_OF_DISPATER,
     SPWPN_SCEPTRE_OF_ASMODEUS,
 
-    SPWPN_END_FIXEDARTS = SPWPN_SCEPTRE_OF_ASMODEUS
+    SPWPN_END_FIXEDARTS = SPWPN_SCEPTRE_OF_ASMODEUS,
+
+    SPWPN_STRONG_FLAMING = 999
 };
 
 enum corpse_type

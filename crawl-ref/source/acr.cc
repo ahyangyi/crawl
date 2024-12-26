@@ -2654,8 +2654,8 @@ void world_reacts()
         manage_efreet_fire_shield();
         if (one_chance_in(10))
         {
-            if (random2(100) < you.experience_level)
-                expose_invent_to_innate_fire(random2(3 + you.experience / 3));
+            if (random2(45) < (you.experience_level + 9))
+                expose_invent_to_innate_fire(random2(30 + you.experience_level));
         }
     }
 

@@ -1752,6 +1752,7 @@ bool acquirement(object_class_type class_wanted, int agent,
             switch (you.species)
             {
             case SP_DEMONSPAWN:
+            case SP_EFREET:
             case SP_MUMMY:
             case SP_GHOUL:
             case SP_VAMPIRE:

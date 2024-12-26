@@ -2779,7 +2779,7 @@ std::string mutation_name(mutation_type mut, int level, bool colour)
             colourname = (level > 0 ? "cyan" : "lightblue");
         else if (permanent)
         {
-            const bool demonspawn = (you.species == SP_DEMONSPAWN);
+            const bool demonspawn = (you.species == SP_DEMONSPAWN || you.species == SP_EFREET);
             const bool extra = (you.mutation[mut] > you.demon_pow[mut]);
 
             if (fully_inactive)

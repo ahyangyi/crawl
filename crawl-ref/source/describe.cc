@@ -2960,12 +2960,14 @@ std::string get_ghost_description(const monsters &mons, bool concise)
     case SP_NAGA:
     case SP_MUMMY:
     case SP_GHOUL:
+    case SP_FURBOLG:
         str = 15;
         break;
 
     case SP_HUMAN:
     case SP_DEMIGOD:
     case SP_DEMONSPAWN:
+    case SP_EFREET:
         str = 10;
         break;
 

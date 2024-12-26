@@ -1241,10 +1241,14 @@ int player_res_magic(void)
     case SP_PURPLE_DRACONIAN:
     case SP_GNOME:
     case SP_DEEP_DWARF:
+    case SP_EFREET:
         rm = you.experience_level * 6;
         break;
     case SP_SPRIGGAN:
         rm = you.experience_level * 7;
+        break;
+    case SP_ABRA:
+        rm = you.experience_level * 9;
         break;
     }
 
@@ -3533,6 +3537,24 @@ void level_change(bool skip_attribute_increase)
                     hp_adjust++;
 
                 mpr("You heal slightly faster.", MSGCH_INTRINSIC_GAIN);
+                break;
+
+            case SP_ABRA:
+                if (you.experience_level % 2)
+                    hp_adjust--;
+
+                if (you.experience_level % 3)
+                    mp_adjust++;
+
+                if (!(you.experience_level % 4))
+                {
+                    modify_stat( STAT_INTELLIGENCE, 1, false, "level gain");
+                }
+                break;
+
+            case SP_EFREET:
+                if (!(you.experience_level % 5))
+                    modify_stat(STAT_RANDOM, 1, false, "level gain");
                 break;
 
             default:
@@ -6092,6 +6114,7 @@ size_type player::body_size(int psize, bool base) const
         case SP_HALFLING:
         case SP_GNOME:
         case SP_KOBOLD:
+        case SP_ABRA:
             ret = SIZE_SMALL;
             break;
 
@@ -6228,7 +6251,9 @@ int player::damage_brand(int)
         ret = SPWPN_CONFUSE;
     else if (mutation[MUT_DRAIN_LIFE])
         ret = SPWPN_DRAINING;
-    else if (you.equip[ EQ_GLOVES ] == -1 && you.species == SP_EFREET && one_chance_in(50/(you.experience_level + 9)))
+    else if (you.equip[ EQ_GLOVES ] == -1 && you.species == SP_EFREET && one_chance_in(80 / you.experience_level))
+        ret = SPWPN_STRONG_FLAMING;
+    else if (you.equip[ EQ_GLOVES ] == -1 && you.species == SP_EFREET && random2(100 / (you.experience_level + 10)) < 3)
         ret = SPWPN_FLAMING;
     else
     {
@@ -6731,7 +6756,7 @@ mon_holy_type player::holiness() const
     if (is_undead)
         return (MH_UNDEAD);
 
-    if (species == SP_DEMONSPAWN)
+    if (species == SP_DEMONSPAWN || species == SP_EFREET)
         return (MH_DEMONIC);
 
     return (MH_NATURAL);
