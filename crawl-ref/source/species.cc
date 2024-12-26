@@ -30,6 +30,7 @@ static species_type species_order[] = {
     SP_OGRE,           SP_TROLL,
     SP_MINOTAUR,       SP_TENGU,
     SP_BASE_DRACONIAN, SP_GARGOYLE,
+    SP_ANTAIO,
     // celestial species
     SP_DEMIGOD,        SP_DEMONSPAWN,
     SP_DJINNI,
@@ -64,7 +65,7 @@ static const char * Species_Abbrev_List[NUM_SPECIES] =
       // the draconians
       "Dr", "Dr", "Dr", "Dr", "Dr", "Dr", "Dr", "Dr", "Dr", "Dr",
       "Ce", "Dg", "Sp", "Mi", "Ds", "Gh", "Te", "Mf", "Vp", "DD",
-      "Fe", "Op", "Dj", "LO", "Gr",
+      "Fe", "Op", "Dj", "LO", "Gr", "An",
       // placeholders
       "El", "HD", "OM", "GE", "Gn", "MD",
 #if TAG_MAJOR_VERSION > 34
@@ -195,6 +196,7 @@ string species_name(species_type speci, bool genus, bool adj)
         case SP_MUMMY:      res = "Mummy";                             break;
         case SP_NAGA:       res = "Naga";                              break;
         case SP_CENTAUR:    res = "Centaur";                           break;
+        case SP_ANTAIO:     res = "Antaio";                            break;
         case SP_SPRIGGAN:   res = "Spriggan";                          break;
         case SP_MINOTAUR:   res = "Minotaur";                          break;
         case SP_TENGU:      res = "Tengu";                             break;
@@ -287,6 +289,7 @@ size_type species_size(species_type species, size_part_type psize)
     {
     case SP_OGRE:
     case SP_TROLL:
+    case SP_ANTAIO:
         return SIZE_LARGE;
     case SP_NAGA:
     case SP_CENTAUR:
@@ -351,6 +354,8 @@ monster_type player_species_to_mons_species(species_type species)
         return MONS_DRACONIAN;
     case SP_CENTAUR:
         return MONS_CENTAUR;
+    case SP_ANTAIO:
+        return MONS_ANTAIO;
     case SP_DEMIGOD:
         return MONS_DEMIGOD;
     case SP_SPRIGGAN:
@@ -413,6 +418,7 @@ int species_exp_modifier(species_type species)
     case SP_GHOUL:
     case SP_MERFOLK:
     case SP_OCTOPODE:
+    case SP_ANTAIO:
     case SP_TENGU:
     case SP_GARGOYLE:
         return 0;
@@ -490,6 +496,7 @@ int species_hp_modifier(species_type species)
         return 2;
     case SP_OGRE:
     case SP_TROLL:
+    case SP_ANTAIO:
         return 3;
     }
 }
@@ -501,6 +508,7 @@ int species_mp_modifier(species_type species)
     case SP_TROLL:
     case SP_MINOTAUR:
         return -2;
+    case SP_ANTAIO:
     case SP_CENTAUR:
     case SP_GHOUL:
         return -1;

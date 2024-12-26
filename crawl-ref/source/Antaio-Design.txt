@@ -1,0 +1,50 @@
+***New Race***
+
+The Antaio (pl. Antaii, adj. Antaio) are a race of giants. They have close
+relationship with the earth.
+
+Commons:
+
+    Common giant traits:
+    
+    [X] Large
+    [N] Hp + 3 / level
+    [N] High strength, low dexterity
+    [M] Hunger faster
+    [N] Good fighting, unarmed aptitude, bad armour, dodging aptitude
+
+    Earth-tied common traits:
+
+    [N] Modestly good earth elementalist aptitide
+
+Specials:
+
+    [S] Becomes extremely weak when not touching the earth
+        * when levitating (thus, levitating becomes a RED option)
+        * when flying
+        * at the moment of blinking/teleportation
+        * NOT when in shallow water. Reason: an Antaio can still touch the
+          ground.
+
+    [A] Can decide to descend when flying
+    
+    [N] Good invocation because Antaeus channels Gaia's power in the
+        myth
+
+    [N] Modestly good necromancy because Antaeus collects skulls for a shrine.
+
+    [A] Ability: Power of Earth
+        Uses invocation
+        After Level 3
+            Gives effect comparable to Stoneskin
+            
+            hungry, 3 MP 
+        Works best in "Ordinary branches", much less so in Abyss, Pandemonium.
+
+    [A] Ability: Gaia's Grasp
+        Uses invocation
+        After Level 6
+            Restraints a non-flying target in LOS
+            hungry, 5 MP, ???
+        Only works if faithless
+        Works best in "Ordinary branches", much less so in Abyss, Pandemonium.

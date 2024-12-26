@@ -69,6 +69,8 @@ static void _species_stat_init(species_type which_species)
 
     case SP_TROLL:              sb = 13; ib =  2; db =  3;      break;  // 18
     case SP_OGRE:               sb = 10; ib =  5; db =  3;      break;  // 18
+    
+    case SP_ANTAIO:             sb =  9; ib =  6; db =  2;      break;  // 17
 
     case SP_MINOTAUR:           sb = 10; ib =  3; db =  3;      break;  // 16
     case SP_GARGOYLE:           sb =  9; ib =  6; db =  3;      break;  // 18
@@ -330,6 +332,9 @@ void give_basic_mutations(species_type speci)
         you.mutation[MUT_SAPROVOROUS]     = 2;
         you.mutation[MUT_GOURMAND]        = 1;
         you.mutation[MUT_SHAGGY_FUR]      = 1;
+        break;
+    case SP_ANTAIO:
+        you.mutation[MUT_FAST_METABOLISM] = 1;
         break;
     case SP_KOBOLD:
         you.mutation[MUT_SAPROVOROUS] = 2;
@@ -1068,7 +1073,7 @@ static void _give_starting_food()
         item.base_type = OBJ_FOOD;
         if (player_genus(GENPC_ORCISH) || you.species == SP_KOBOLD
             || you.species == SP_OGRE || you.species == SP_TROLL
-            || you.species == SP_FELID)
+            || you.species == SP_FELID || you.species == SP_ANTAIO)
         {
             item.sub_type = FOOD_MEAT_RATION;
         }

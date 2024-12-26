@@ -3825,6 +3825,7 @@ string get_ghost_description(const monster_info &mi, bool concise)
     case SP_HILL_ORC:
     case SP_LAVA_ORC:
     case SP_CENTAUR:
+    case SP_ANTAIO:
     case SP_NAGA:
     case SP_MUMMY:
     case SP_GHOUL:

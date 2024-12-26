@@ -225,6 +225,7 @@ static string _stk_weight()
     {
     case SP_OGRE:
     case SP_TROLL:
+    case SP_ANTAIO:
         return "Heavy";
 
     case SP_NAGA:

@@ -685,7 +685,8 @@ bool you_can_wear(int eq, bool special_armour)
         // These species cannot wear gloves.
         if (you.species == SP_TROLL
             || you.species == SP_SPRIGGAN
-            || you.species == SP_OGRE)
+            || you.species == SP_OGRE
+            || you.species == SP_ANTAIO)
         {
             return false;
         }
@@ -704,6 +705,7 @@ bool you_can_wear(int eq, bool special_armour)
         if (you.species == SP_TROLL
             || you.species == SP_SPRIGGAN
             || you.species == SP_OGRE
+            || you.species == SP_ANTAIO
             || you.species == SP_DJINNI)
         {
             return false;
@@ -745,6 +747,7 @@ bool you_can_wear(int eq, bool special_armour)
         if (you.species == SP_TROLL
             || you.species == SP_SPRIGGAN
             || you.species == SP_OGRE
+            || you.species == SP_ANTAIO
             || player_genus(GENPC_DRACONIAN))
         {
             return false;
