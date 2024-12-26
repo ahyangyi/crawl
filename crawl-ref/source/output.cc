@@ -2361,7 +2361,7 @@ std::string _status_mut_abilities()
     if (you.duration[DUR_MAGIC_SHIELD])
         status.push_back("shielded");
 
-    if (you.duration[DUR_FIRE_SHIELD])
+    if (you.duration[DUR_FIRE_SHIELD] || you.species == SP_EFREET)
     {
         status.push_back(_get_expiration_string(DUR_FIRE_SHIELD,
                                                 "immune to fire clouds"));

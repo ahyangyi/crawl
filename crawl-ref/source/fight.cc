@@ -3446,7 +3446,7 @@ int melee_attack::player_to_hit(bool random_factor)
     else
     {                       // ...you must be unarmed
         your_to_hit +=
-            (you.species == SP_TROLL || you.species == SP_GHOUL) ? 4 : 2;
+            (you.species == SP_TROLL || you.species == SP_GHOUL || you.species == SP_FURBOLG) ? 4 : 2;
 
         your_to_hit += maybe_random2(1 + you.skills[SK_UNARMED_COMBAT],
                                      random_factor);
@@ -3748,12 +3748,14 @@ int melee_attack::player_calc_base_unarmed_damage()
         // Claw damage only applies for bare hands.
         if (you.species == SP_TROLL)
             damage += 5;
+        else if (you.species == SP_FURBOLG)
+            damage += 4;
         else if (you.species == SP_GHOUL)
             damage += 2;
 
         damage += player_mutation_level(MUT_CLAWS) * 2;
     }
-
+    
     if (you.attribute[ATTR_TRANSFORMATION] == TRAN_BAT)
     {
         // Bats really don't do a lot of damage.

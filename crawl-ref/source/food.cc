@@ -1954,6 +1954,9 @@ static void _eating(unsigned char item_class, int item_type)
         if (herbivore_modifier && how_herbivorous > 0)
             food_value += (herbivore_modifier * how_herbivorous);
 
+//        if (you.species == SP_FURBOLG && item_type == FOOD_HONEYCOMB)
+//            food_value += 1000;
+
         if (food_value > 0)
         {
             int duration = 1;
@@ -2090,6 +2093,13 @@ void finished_eating_message(int food_type)
     switch (food_type)
     {
     case FOOD_HONEYCOMB:
+        if (you.species == SP_FURBOLG)
+        {
+            mpr("Waoaoaoaoao!!! I LOVE HONEYCOMB!!!!!");
+            potion_effect(POT_MIGHT, 40);
+        }
+        else
+            mpr("That honeycomb was delicious.");
         mpr("That honeycomb was delicious.");
         break;
     case FOOD_ROYAL_JELLY:

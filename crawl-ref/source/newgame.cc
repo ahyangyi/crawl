@@ -129,7 +129,8 @@ static species_type old_species_order[] = {
     SP_MINOTAUR,      SP_DEMONSPAWN,
     SP_GHOUL,         SP_KENKU,
     SP_MERFOLK,       SP_VAMPIRE,
-    SP_DEEP_DWARF
+    SP_DEEP_DWARF,    SP_FURBOLG,
+    SP_ABRA,          SP_EFREET,
 };
 
 // Fantasy staples and humanoid creatures come first, then diminutive and
@@ -145,13 +146,16 @@ static species_type new_species_order[] = {
     // small species
     SP_HALFLING,      SP_GNOME,
     SP_KOBOLD,        SP_SPRIGGAN,
+    SP_ABRA,          
     // significantly different body type from human
     SP_NAGA,          SP_CENTAUR,
     SP_OGRE,          SP_TROLL,
     SP_MINOTAUR,      SP_KENKU,
-    SP_RED_DRACONIAN,
+    SP_RED_DRACONIAN, SP_FURBOLG,
     // celestial species
     SP_DEMIGOD,       SP_DEMONSPAWN,
+    // demonic species
+    SP_EFREET,
     // undead species
     SP_MUMMY,         SP_GHOUL,
     SP_VAMPIRE
@@ -190,7 +194,7 @@ static job_type old_jobs_order[] = {
     JOB_HEALER,             JOB_REAVER,
     JOB_STALKER,            JOB_MONK,
     JOB_WARPER,             JOB_WANDERER,
-    JOB_ARTIFICER
+    JOB_ARTIFICER,          JOB_SEER
 };
 
 // First plain fighters, then religious fighters, then spell-casting
@@ -205,6 +209,7 @@ static job_type new_jobs_order[] = {
     JOB_DEATH_KNIGHT,       JOB_CRUSADER,
     // general and niche spellcasters (incl. Crusader above)
     JOB_REAVER,             JOB_WARPER,
+    JOB_SEER,
     JOB_WIZARD,             JOB_CONJURER,
     JOB_ENCHANTER,          JOB_SUMMONER,
     JOB_NECROMANCER,        JOB_TRANSMUTER,
@@ -214,7 +219,7 @@ static job_type new_jobs_order[] = {
     JOB_VENOM_MAGE,         JOB_STALKER,
     JOB_THIEF,              JOB_ASSASSIN,
     JOB_HUNTER,             JOB_ARTIFICER,
-    JOB_WANDERER
+    JOB_WANDERER,           
 };
 
 static job_type _get_class(const int index)
@@ -232,6 +237,8 @@ static const char * Species_Abbrev_List[ NUM_SPECIES ] =
       // the draconians
       "Dr", "Dr", "Dr", "Dr", "Dr", "Dr", "Dr", "Dr", "Dr", "Dr",
       "Ce", "DG", "Sp", "Mi", "DS", "Gh", "Ke", "Mf", "Vp", "DD",
+      // fur
+      "Fb", "Ab", "Ef", 
       // placeholders
       "El", "HD", "OM" };
 
@@ -312,7 +319,7 @@ int get_species_by_abbrev( const char *abbrev )
 static const char * Class_Abbrev_List[ NUM_JOBS ] =
     { "Fi", "Wz", "Pr", "Th", "Gl", "Ne", "Pa", "As", "Be", "Hu",
       "Cj", "En", "FE", "IE", "Su", "AE", "EE", "Cr", "DK", "VM",
-      "CK", "Tm", "He", "Re", "St", "Mo", "Wr", "Wn", "Ar" };
+      "CK", "Tm", "He", "Re", "St", "Mo", "Wr", "Wn", "Ar", "Se" };
 
 static const char * Class_Name_List[ NUM_JOBS ] =
     { "Fighter", "Wizard", "Priest", "Thief", "Gladiator", "Necromancer",
@@ -320,7 +327,7 @@ static const char * Class_Name_List[ NUM_JOBS ] =
       "Fire Elementalist", "Ice Elementalist", "Summoner", "Air Elementalist",
       "Earth Elementalist", "Crusader", "Death Knight", "Venom Mage",
       "Chaos Knight", "Transmuter", "Healer", "Reaver", "Stalker",
-      "Monk", "Warper", "Wanderer", "Artificer" };
+      "Monk", "Warper", "Wanderer", "Artificer","Seer" };
 
 int get_class_index_by_abbrev( const char *abbrev )
 {
@@ -842,6 +849,12 @@ static void _give_starting_food()
         item.sub_type  = POT_BLOOD;
         init_stack_blood_potions(item);
     }
+    else if (you.species == SP_FURBOLG)
+    {
+        item.base_type = OBJ_FOOD;
+        item.sub_type  = FOOD_HONEYCOMB;
+        item.quantity = 2;
+    }
     else
     {
         item.base_type = OBJ_FOOD;
@@ -1010,6 +1023,7 @@ static void _give_species_bonus_hp()
         case SP_CENTAUR:
         case SP_OGRE:
         case SP_TROLL:
+        case SP_FURBOLG:
             inc_max_hp(3);
             break;
 
@@ -1038,6 +1052,7 @@ static void _give_species_bonus_hp()
         case SP_KENKU:
         case SP_KOBOLD:
         case SP_SPRIGGAN:
+        case SP_ABRA:
             dec_max_hp(2);
             break;
 
@@ -1057,6 +1072,7 @@ static void _give_species_bonus_mp()
     case SP_DEMIGOD:
     case SP_GREY_ELF:
     case SP_DEEP_ELF:
+    case SP_ABRA:
         inc_max_mp(1);
         break;
 
@@ -1615,6 +1631,26 @@ static char_choice_restriction _class_allowed(species_type speci,
             return (CC_UNRESTRICTED);
         }
 
+    case JOB_SEER:
+        switch (speci)
+        {
+        case SP_MOUNTAIN_DWARF:
+        case SP_HILL_ORC:
+        case SP_MERFOLK:
+        case SP_HALFLING:
+        case SP_GNOME:
+        case SP_KOBOLD:
+        case SP_SPRIGGAN:
+        case SP_CENTAUR:
+        case SP_TROLL:
+        case SP_OGRE:
+        case SP_MINOTAUR:
+        case SP_GHOUL:
+            return (CC_RESTRICTED);
+        default:
+            return (CC_UNRESTRICTED);
+        }
+
     case JOB_CONJURER:
         switch (speci)
         {
@@ -1923,6 +1959,7 @@ static char_choice_restriction _class_allowed(species_type speci,
         case SP_OGRE:
         case SP_MUMMY:
         case SP_GHOUL:
+        case SP_FURBOLG:
             return (CC_RESTRICTED);
         default:
             return (CC_UNRESTRICTED);
@@ -2791,6 +2828,11 @@ static void _species_stat_init(species_type which_species)
     case SP_GHOUL:              sb =  9; ib =  1; db =  2;      break;  // 13
     case SP_VAMPIRE:            sb =  5; ib =  8; db =  7;      break;  // 20
 
+    case SP_FURBOLG:            sb =  7; ib =  4; db =  6;      break;  // 17
+
+    case SP_ABRA:               sb =  2; ib = 10; db =  5;      break;  // 17
+    case SP_EFREET:             sb =  8; ib =  6; db =  5;      break;  // 19
+
     case SP_RED_DRACONIAN:
     case SP_WHITE_DRACONIAN:
     case SP_GREEN_DRACONIAN:
@@ -2837,6 +2879,8 @@ static void _jobs_stat_init(job_type which_job)
     case JOB_HUNTER:            s =  3; i =  3; d =  4; hp = 13; mp = 0; break;
     case JOB_WARPER:            s =  3; i =  4; d =  3; hp = 12; mp = 1; break;
 
+    case JOB_SEER:              s =  2; i =  5; d =  3; hp = 11; mp = 2; break;
+
     case JOB_MONK:              s =  2; i =  2; d =  6; hp = 13; mp = 0; break;
     case JOB_TRANSMUTER:        s =  2; i =  4; d =  4; hp = 12; mp = 1; break;
 
@@ -2854,6 +2898,7 @@ static void _jobs_stat_init(job_type which_job)
     case JOB_WANDERER:          s =  2; i =  2; d =  2; hp = 11; mp = 1; break;
 
     case JOB_ARTIFICER:         s =  2; i =  3; d =  4; hp = 13; mp = 0; break;
+
     default:                    s =  0; i =  0; d =  0; hp = 10; mp = 0; break;
     }
 
@@ -2943,6 +2988,19 @@ void give_basic_mutations(species_type speci)
         you.mutation[MUT_FANGS]        = 3;
         you.mutation[MUT_ACUTE_VISION] = 1;
         break;
+    case SP_FURBOLG:
+        you.mutation[MUT_SHAGGY_FUR]   = 3;
+        you.mutation[MUT_DEFORMED]     = 1;
+        break;
+    case SP_ABRA:
+        you.mutation[MUT_TELEPORT_CONTROL] = 1;
+        you.mutation[MUT_ACUTE_VISION] = 2;
+        break;
+    case SP_EFREET:
+        you.mutation[MUT_HEAT_RESISTANCE] = 3;
+        you.mutation[MUT_THROW_FLAMES] = 1;
+        you.mutation[MUT_IMMOLATION] = 1;
+        break;
     default:
         break;
     }
@@ -2973,6 +3031,12 @@ static void _give_basic_knowledge(job_type which_job)
     case JOB_ARTIFICER:
         if (!item_is_rod(you.inv[2]))
             set_ident_type(OBJ_SCROLLS, SCR_RECHARGING, ID_KNOWN_TYPE);
+        break;
+
+    case JOB_SEER:
+        set_ident_type( OBJ_SCROLLS, SCR_MAGIC_MAPPING, ID_KNOWN_TYPE );
+        set_ident_type( OBJ_SCROLLS, SCR_IDENTIFY, ID_KNOWN_TYPE );
+        set_ident_type( OBJ_SCROLLS, SCR_DETECT_CURSE, ID_KNOWN_TYPE );
         break;
 
     default:
@@ -5357,6 +5421,44 @@ bool _give_items_skills()
         you.skills[SK_SPELLCASTING] = 1;
         you.skills[SK_DODGING]      = 2;
         you.skills[SK_STEALTH]      = 2;
+        break;
+
+    case JOB_SEER:
+        
+        _newgame_make_item(0, EQ_WEAPON, OBJ_WEAPONS, WPN_SHORT_SWORD);
+        if (!_choose_weapon())
+            return (false);
+
+        if (you.inv[0].quantity < 1)
+            _newgame_clear_item(0);
+
+        _newgame_make_item(1, EQ_BODY_ARMOUR, OBJ_ARMOUR, ARM_ROBE, -1,
+                              1, 1);
+
+        _newgame_make_item(2, EQ_NONE, OBJ_BOOKS, BOOK_SEEING);
+
+        _newgame_make_item(3, EQ_NONE, OBJ_MISSILES, MI_DART, -1,
+                              8 + roll_dice( 2, 8 ), 1);
+        
+        if (random2(3) == 0)
+            _newgame_make_item(3, EQ_NONE, OBJ_SCROLLS, SCR_IDENTIFY, -1,
+                                  1, 1);
+        else
+            if (random2(2) == 0)
+                _newgame_make_item(3, EQ_NONE, OBJ_SCROLLS, SCR_MAGIC_MAPPING, -1,
+                                      1, 1);
+            else
+                _newgame_make_item(3, EQ_NONE, OBJ_SCROLLS, SCR_DETECT_CURSE, -1,
+                                      2+random2(2), 1);
+
+        you.skills[SK_FIGHTING]       = 1;
+        you.skills[SK_ARMOUR]         = 1;
+        you.skills[SK_DIVINATIONS]    = 4;
+        you.skills[SK_SPELLCASTING]   = 1;
+        you.skills[SK_DODGING]        = 2;
+        you.skills[SK_STEALTH]        = 1;
+        you.skills[SK_DARTS]          = 1;
+        weap_skill = 2;
         break;
 
     case JOB_ENCHANTER:

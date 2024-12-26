@@ -491,6 +491,17 @@ static spell_type spellbook_template_array[][SPELLBOOK_SIZE] =
      SPELL_NO_SPELL,
      },
 
+    // 40.5 - Book of Seeing
+    {SPELL_DETECT_SECRET_DOORS,
+     SPELL_DETECT_ITEMS,
+     SPELL_DETECT_CURSE,
+     SPELL_MAGIC_MAPPING,
+     SPELL_SEE_INVISIBLE,
+     SPELL_FORESCRY,
+     SPELL_NO_SPELL,
+     SPELL_NO_SPELL,
+     },
+
     // 41 - Book of Stalking //jmf: 24jun2000
     {SPELL_STING,
      SPELL_SURE_BLADE,
@@ -908,6 +919,7 @@ int book_rarity(unsigned char which_book)
     case BOOK_FROST:
     case BOOK_AIR:
     case BOOK_GEOMANCY:
+    case BOOK_SEEING:
         return 4;
 
     case BOOK_YOUNG_POISONERS:

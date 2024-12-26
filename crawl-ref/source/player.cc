@@ -1043,6 +1043,10 @@ int player_regen()
     // Fast heal mutation.
     rr += player_mutation_level(MUT_REGENERATION) * 20;
 
+    // Furbolg innate ability will give +40 regeneration at level 27.
+    if (you.species == SP_FURBOLG)
+        rr += you.experience_level * 40 / 27;
+
     // Before applying other effects, make sure that there's something
     // to heal.
     if (rr < 1)
@@ -1422,6 +1426,9 @@ int player_res_cold(bool calc_unid, bool temp, bool items)
         rc += scan_randarts(RAP_COLD, calc_unid);
     }
 
+    if (you.species == SP_EFREET)
+        rc --;
+
     // mutations:
     rc += player_mutation_level(MUT_COLD_RESISTANCE);
 
@@ -1675,6 +1682,9 @@ int player_spec_fire()
 
     if (you.duration[DUR_FIRE_SHIELD])
         sf++;
+
+    if (you.species == SP_EFREET)
+        sf ++;
 
     return sf;
 }
@@ -3518,6 +3528,13 @@ void level_change(bool skip_attribute_increase)
                     modify_stat(STAT_RANDOM, 1, false, "level gain");
                 break;
 
+            case SP_FURBOLG:
+                if (you.experience_level % 2)
+                    hp_adjust++;
+
+                mpr("You heal slightly faster.", MSGCH_INTRINSIC_GAIN);
+                break;
+
             default:
                 break;
             }
@@ -3593,6 +3610,7 @@ int check_stealth(void)
                 stealth += (you.skills[SK_STEALTH] * 9);
                 break;
             case SP_MINOTAUR:
+            case SP_FURBOLG:
                 stealth += (you.skills[SK_STEALTH] * 12);
                 break;
             case SP_VAMPIRE:
@@ -4304,6 +4322,9 @@ std::string species_name(species_type speci, int level, bool genus, bool adj)
         case SP_SPRIGGAN:   res = "Spriggan";                          break;
         case SP_MINOTAUR:   res = "Minotaur";                          break;
         case SP_KENKU:      res = "Kenku";                             break;
+        case SP_FURBOLG:    res = "Furbolg";                           break;
+        case SP_ABRA:       res = "Abra";                              break;
+        case SP_EFREET:     res = "Efreet";                            break;
 
         case SP_HILL_ORC:
             res = (adj ? "Orcish" : genus ? "Orc" : "Hill Orc");
@@ -4410,6 +4431,7 @@ static int _species_exp_mod(species_type species)
         case SP_NAGA:
         case SP_GHOUL:
         case SP_MERFOLK:
+        case SP_FURBOLG:
             return 12;
         case SP_SPRIGGAN:
         case SP_KENKU:
@@ -4424,6 +4446,8 @@ static int _species_exp_mod(species_type species)
         case SP_MUMMY:
         case SP_VAMPIRE:
         case SP_TROLL:
+        case SP_EFREET:
+        case SP_ABRA:
             return 15;
         case SP_DEMIGOD:
             return 16;
@@ -6204,6 +6228,8 @@ int player::damage_brand(int)
         ret = SPWPN_CONFUSE;
     else if (mutation[MUT_DRAIN_LIFE])
         ret = SPWPN_DRAINING;
+    else if (you.equip[ EQ_GLOVES ] == -1 && you.species == SP_EFREET && one_chance_in(50/(you.experience_level + 9)))
+        ret = SPWPN_FLAMING;
     else
     {
         switch (attribute[ATTR_TRANSFORMATION])
@@ -7023,7 +7049,7 @@ int player::has_claws(bool allow_tran) const
     }
 
     // these are the only other sources for claws
-    if (species == SP_TROLL || species == SP_GHOUL)
+    if (species == SP_TROLL || species == SP_GHOUL || species == SP_FURBOLG)
         return (3);
 
     return (player_mutation_level(MUT_CLAWS));

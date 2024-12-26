@@ -2649,6 +2649,16 @@ void world_reacts()
     if (you.duration[DUR_FIRE_SHIELD] > 0)
         manage_fire_shield();
 
+    if (you.species == SP_EFREET)
+    {
+        manage_efreet_fire_shield();
+        if (one_chance_in(10))
+        {
+            if (random2(100) < you.experience_level)
+                expose_invent_to_innate_fire(random2(3 + you.experience / 3));
+        }
+    }
+
     // Food death check.
     if (you.is_undead != US_UNDEAD && you.hunger <= 500)
     {

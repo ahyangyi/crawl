@@ -1425,3 +1425,14 @@ void manage_fire_shield()
         if (!grid_is_solid(grd(*ai)) && env.cgrid(*ai) == EMPTY_CLOUD)
             place_cloud( CLOUD_FIRE, *ai, 1 + random2(6), KC_YOU );
 }
+
+void manage_efreet_fire_shield()
+{
+    ASSERT(you.species == SP_EFREET);
+
+    // Place fire clouds all around you
+    for ( adjacent_iterator ai; ai; ++ai )
+        if (!grid_is_solid(grd(*ai)) && env.cgrid(*ai) == EMPTY_CLOUD)
+            if (random2(31) < you.experience_level + 4)
+                place_cloud( CLOUD_FIRE, *ai, 1 + random2(2), KC_YOU );
+}

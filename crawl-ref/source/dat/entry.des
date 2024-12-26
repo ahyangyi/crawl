@@ -4772,3 +4772,128 @@ xx...xx   xx+xx   xx...xx
          xx...xx
           xxxxx
 ENDMAP
+
+NAME:    entry_yy
+TAGS:    entry
+ORIENT:  float
+WEIGHT:  0
+SHUFFLE: +=
+SUBST: + = x
+SHUFFLE: QWE
+SUBST: Q = =
+SUBST: W = x
+SUBST: E = x
+MONS: col:lightblue butterfly
+MAP
+    xxxxxxxxxxxxxxxxxxx
+    x11111111111111111x
+    x11111111111111111x
+    x.x     x.x     x.x
+    x.x     x.x     x.x
+    x.x     x.x     x.x
+    x.x     x.x     x.x
+xxxxxQxxxxxxxWxxxxxxxExxxxx
+x...........({[...........x
+x.....xxxxxxxxxxxxxxx.....x
+x.....m....*999*....m.....x
+x.....mm....*|*....mm.....x
+x......=...........+......x
+xxx.xxxxxxxxxxxxxxxxxxx=xxx
+  x+x                 x+x  
+ENDMAP
+
+NAME:    entry_yy_2
+TAGS:    entry
+ORIENT:  float
+WEIGHT:  0
+SHUFFLE: 123
+SHUFFLE: 456
+SHUFFLE: 78G
+SUBST: 1 = =
+SUBST: 2 = x
+SUBST: 3 = x
+SUBST: 4 = =
+SUBST: 5 = x
+SUBST: 6 = x
+SUBST: 7 = =
+SUBST: 8 = x
+SUBST: 9 = x
+SHUFFLE: {}
+SHUFFLE: ()
+SHUFFLE: []
+SUBST: } = |
+SUBST: ) = |
+SUBST: ] = |
+SUBST: T = T U:2
+SUBST: T = T:20 Y:1
+SUBST: T = T C:3
+MAP
+1xxxx      xxxx2                5xxxx      xxxx6
+x...xx    xx...x                x...xx    xx...x
+xx...xx  xx...xx                xx...xx  xx...xx
+ xx...xxxx...xx                  xx...xxxx...xx 
+  xx...xx...xx                    xx...xx...xx  
+   xx..{}..xx                      xx..[]..xx   
+    xx....xx                        xx....xx    
+     xx..xx                          xx..xx     
+      x..x                            x..x      
+      x..x                            x..x      
+      x..x                            x..x      
+      x..x                            x..x      
+      x..x                            x..x      
+      x..x                            x..x      
+      x..x                            x..x      
+      x3xx                            xx4x      
+               ..  ..      ..  ..
+               ..  ..      ..  ..
+                ....        ....
+                 ..          ..
+                 ..    TT    ..
+                 ..          ..
+                     ..  ..
+                     ..  ..
+                      ....
+                       ..
+                       ..
+                       ..
+                8xxxx      xxxx9
+                x...xx    xx...x
+                xx...xx  xx...xx
+                 xx...xxxx...xx 
+                  xx...xx...xx
+                   xx..()..xx
+                    xx....xx
+                     xx..xx
+                      x..x
+                      x..x
+                      x..x
+                      x..x
+                      x..x
+                      x..x
+                      x..x
+                      x7xx
+ENDMAP
+
+NAME:    entry_yy_cheat
+TAGS:    entry generate_awake
+ORIENT:  float
+WEIGHT:  0
+ITEM: q:12 scroll of acquirement
+KFEAT: X = teleport trap
+KMONS: 1 = draconian knight
+KMONS: 2 = jelly
+MAP
+xxxxxxxxxxxxxxxxxxxxxxxxxx
+x88888888888x||||||||||||x
+x8X888X888X8x|2||2||2||2|x
+x88888888888x||||||||||||x
+x8X888X888X8xxxxxxxxxxxxxx
+x8888888xxxxxX
+x8X888X8xd([{X
+x8888888xxxxxX
+x8X888X888X8xxxxxxxxxxxxxx
+x88888888888x111111111111x
+x8X888X888X8x1X11X11X11X1x
+x88888888888x111111111111x
+xxxxxxxxxxxxxxxxxxxxxxxxxx
+ENDMAP

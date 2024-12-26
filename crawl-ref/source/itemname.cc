@@ -878,6 +878,7 @@ static const char* book_type_name(int booktype)
     case BOOK_RANDART_LEVEL:          return "Fixed Level";
     case BOOK_RANDART_THEME:          return "Fixed Theme";
     case BOOK_CARD_EFFECT:            return "Card Effects";
+    case BOOK_SEEING:                 return "Seeing";
     default:                          return "Bugginess";
     }
 }

@@ -305,6 +305,7 @@ enum book_type
     BOOK_CANTRIPS,                     //jmf: 04jan2000
     BOOK_PARTY_TRICKS,                 //jmf: 04jan2000
     BOOK_BEASTS,                       //   40
+    BOOK_SEEING,
     BOOK_STALKING,         // renamed -- assassination was confusing  -- bwr
     MAX_NORMAL_BOOK = BOOK_STALKING,
 
@@ -1455,6 +1456,7 @@ enum job_type
     JOB_WARPER,
     JOB_WANDERER,                      //   27
     JOB_ARTIFICER,                     //   28 -Greenberg/Bane
+    JOB_SEER,
     NUM_JOBS,                          // always after the last job
 
     JOB_UNKNOWN = 100
@@ -2321,6 +2323,7 @@ enum mutation_type
     MUT_SHAGGY_FUR,
     MUT_HIGH_MAGIC,
     MUT_LOW_MAGIC,
+    MUT_IMMOLATION,
 
     // several types of scales (affect AC and sometimes more)
     MUT_RED_SCALES,
@@ -2622,6 +2625,9 @@ enum species_type
     SP_MERFOLK,
     SP_VAMPIRE,
     SP_DEEP_DWARF,
+    SP_FURBOLG,
+    SP_ABRA,
+    SP_EFREET,
     SP_ELF,                            // (placeholder)
     SP_HILL_DWARF,                     // (placeholder)
     SP_OGRE_MAGE,                      // (placeholder)

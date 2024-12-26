@@ -983,6 +983,25 @@ mutation_def mutation_defs[] = {
       "low mp"
     },
 
+    { MUT_IMMOLATION,                0,  1, false,  true,
+
+      {"You keep burning all the way.",
+       "You are covered in firey fur.",
+       "You are covered in firey fur.",
+       },
+
+      {"Your skin burns (report a bug!).",
+       "You are covered in firey fur.",
+       "You are covered in firey fur.",
+       },
+
+      {"Your skin condenses (report a bug!).",
+       "You feel less furry.",
+       "You feel less furry.",
+        },
+      "immolation"
+    },
+
     { RANDOM_MUTATION,                0,  3, false, false,
       {"", "", ""},
       {"", "", ""},
@@ -1251,7 +1270,7 @@ void fixup_mutations()
             if (mutation_defs[i].mutation == MUT_BIG_WINGS)
                 mutation_defs[i].rarity = 1;
 
-    if (you.species == SP_TROLL)
+    if (you.species == SP_TROLL || you.species == SP_FURBOLG)
     {
         for (unsigned i = 0; i < ARRAYSZ(mutation_defs); ++i)
         {
@@ -1347,6 +1366,31 @@ formatted_string describe_mutations()
 
     case SP_GHOUL:
         result += "Your body is rotting away." EOL;
+        have_any = true;
+        break;
+
+    case SP_FURBOLG:
+        result += "You heal slightly quicklier as you get more experienced." EOL;
+        if (!you.mutation[MUT_CLAWS])
+        {
+            result += mutation_name(MUT_CLAWS, -1, true);
+            result += EOL;
+        }
+        have_any = true;
+        break;
+    
+    case SP_EFREET:
+        result += "You are immune to clouds of flame." EOL;
+        if (you.experience_level <= 7)
+            result += "You occasionallt burn your foes with your fists." EOL;
+        else
+            if (you.experience_level <= 16)
+                result += "You often burn your foes with your fists." EOL;
+            else
+                result += "You burn your foes with your fists." EOL;
+        result += "You are exceptionally good at fire magic." EOL;
+        result += "You are vulnerable to cold." EOL;
+
         have_any = true;
         break;
 
@@ -2693,10 +2737,10 @@ std::string mutation_name(mutation_type mut, int level, bool colour)
     bool innate = false;
 
     if (mut == MUT_CLAWS &&
-        (you.species == SP_TROLL || you.species == SP_GHOUL))
+        (you.species == SP_TROLL || you.species == SP_GHOUL || you.species == SP_FURBOLG))
     {
         innate = true;
-        if (you.species == SP_TROLL)
+        if (you.species == SP_TROLL || you.species == SP_FURBOLG)
             result = troll_claw_descrip[level];
     }
 

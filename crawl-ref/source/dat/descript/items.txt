@@ -316,6 +316,11 @@ book of practical magic
 A book of magic spells. Beware, for some of the more powerful
 grimoires are not to be toyed with.
 %%%%
+book of seeing
+
+A book of magic spells. Beware, for some of the more powerful
+grimoires are not to be toyed with.
+%%%%
 book of spatial translocations
 
 A book of magic spells. Beware, for some of the more powerful

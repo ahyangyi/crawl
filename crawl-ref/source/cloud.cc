@@ -444,6 +444,9 @@ void in_a_cloud()
         if (you.duration[DUR_FIRE_SHIELD])
             return;
 
+        if (you.species == SP_EFREET)
+            return;
+
         mpr("You are engulfed in roaring flames!");
 
         resist = player_res_fire();
@@ -598,7 +601,7 @@ bool is_damaging_cloud(cloud_type type, bool temp)
     // always harmful...
     case CLOUD_FIRE:
         // ... unless a Ring of Flames is up and it's a fire cloud.
-        if (temp && you.duration[DUR_FIRE_SHIELD])
+        if (temp && you.duration[DUR_FIRE_SHIELD] || you.species == SP_EFREET)
             return (false);
     case CLOUD_CHAOS:
     case CLOUD_COLD:

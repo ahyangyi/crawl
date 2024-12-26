@@ -75,6 +75,7 @@ bool drain_exp(bool announce_full = true);
 
 bool expose_items_to_element(beam_type flavour, const coord_def& where,
                              int strength = 0);
+bool expose_invent_to_innate_fire(int strength = 0);
 bool expose_player_to_element(beam_type flavour, int strength = 0);
 
 #endif

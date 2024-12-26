@@ -30,7 +30,7 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define CRAWL "Dungeon Crawl Stone Soup"
+#define CRAWL "Dungeon Crawl Furry Soup"
 
 #define VER_NUM  "0.5"
 #define VER_QUAL "-svn"

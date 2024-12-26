@@ -501,6 +501,52 @@ static bool _expose_invent_to_element(beam_type flavour, int strength)
     return (true);
 }
 
+bool expose_invent_to_innate_fire(int strength)
+{
+    int num_dest = 0;
+
+    const int target_class = OBJ_SCROLLS;
+
+    // Currently we test against each stack (and item in the stack)
+    // independently at strength%... perhaps we don't want that either
+    // because it makes the system very fair and removes the protection
+    // factor of junk (which might be more desirable for game play).
+    for (int i = 0; i < ENDOFPACK; ++i)
+    {
+        if (!is_valid_item(you.inv[i]))
+            continue;
+
+        if (you.inv[i].base_type == target_class)
+        {
+            for (int j = 0; j < you.inv[i].quantity; ++j)
+            {
+                if (x_chance_in_y(strength, 100))
+                {
+                    num_dest++;
+                    if (dec_inv_item_quantity(i, 1))
+                        break;
+                }
+            }
+        }
+    }
+
+    if (!num_dest)
+        return (false);
+
+    switch (target_class)
+    {
+    case OBJ_SCROLLS:
+        mprf("%s you are carrying %s fire from yourself!",
+             (num_dest > 1) ? "Some of the scrolls" : "A scroll",
+             (num_dest > 1) ? "catch" : "catches" );
+        break;
+    }
+
+    xom_is_stimulated((num_dest > 1) ? 48 : 24);
+
+    return (true);
+}
+
 bool expose_items_to_element(beam_type flavour, const coord_def& where,
                              int strength)
 {
