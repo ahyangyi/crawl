@@ -61,14 +61,14 @@ function ch_stash_search_annotate_item(it)
     do
         annot = annot .. "{" .. skills[i] .. "} "
     end
-    local hands = it.hands
-    local hands_adj
-    if hands == 2 then
-      hands_adj = "two-handed"
-    else
-      hands_adj = "one-handed"
-    end
     if skill ~= "Throwing" then
+      local hands = it.hands
+      local hands_adj
+      if hands == 2 then
+        hands_adj = "two-handed"
+      else
+        hands_adj = "one-handed"
+      end
       annot = annot .. "{" .. hands_adj .. "} "
     end
   end
@@ -159,8 +159,11 @@ function ch_stash_search_annotate_item(it)
 
   if it.class(true) == "armour" then
       annot = annot .. " {" .. it.subtype() .. " armor}"
-      if it.subtype() ~= "body" then
+      if it.subtype() ~= "Body Armour" then
           annot = annot .. " {auxiliary armor} {auxiliary armour}"
+      end
+      if it.is_shield() then
+          annot = annot .. " {shield}"
       end
   end
 

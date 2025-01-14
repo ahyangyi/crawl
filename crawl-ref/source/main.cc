@@ -1344,6 +1344,11 @@ static bool _can_take_stairs(dungeon_feature_type ftype, bool down,
         canned_msg(MSG_CANNOT_MOVE);
         return false;
     }
+    else if (you.duration[DUR_VAINGLORY])
+    {
+        mpr("It simply wouldn't do to leave so soon after announcing yourself.");
+        return false;
+    }
 
     // ATTR_HELD is intentionally not tested here, it's handled in _take_stairs()
 
@@ -1529,8 +1534,11 @@ static bool _prompt_stairs(dungeon_feature_type ygrd, bool down, bool shaft)
         }
     }
 
-    if (ygrd != DNGN_TRANSPORTER && beogh_cancel_leaving_floor())
+    if (ygrd != DNGN_TRANSPORTER && ygrd != DNGN_PASSAGE_OF_GOLUBRIA
+        && beogh_cancel_leaving_floor())
+    {
         return false;
+    }
 
     if (Options.warn_hatches)
     {

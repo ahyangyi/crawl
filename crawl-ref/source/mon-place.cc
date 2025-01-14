@@ -835,6 +835,9 @@ monster* get_free_monster()
     for (auto &mons : menv_real)
         if (mons.type == MONS_NO_MONSTER)
         {
+            if (mons.mindex() > env.max_mon_index)
+                env.max_mon_index = mons.mindex();
+
             mons.reset();
             return &mons;
         }
@@ -1460,6 +1463,12 @@ static monster* _place_monster_aux(const mgen_data &mg, const monster *leader,
         && !crawl_state.generating_level)
     {
         gozag_set_bribe(mon);
+    }
+
+    if (mg.summoner && mg.summoner->is_player()
+        && you.unrand_equipped(UNRAND_JUSTICARS_REGALIA))
+    {
+        mon->add_ench(mon_enchant(ENCH_REGENERATION, 0, &you, random_range(300, 500)));
     }
 
     return mon;
@@ -3067,7 +3076,6 @@ monster_type random_demon_by_tier(int tier)
     {
     case 5:
         return random_choose(MONS_CRIMSON_IMP,
-                             MONS_QUASIT,
                              MONS_WHITE_IMP,
                              MONS_UFETUBUS,
                              MONS_IRON_IMP,
@@ -3396,7 +3404,6 @@ static const vector<pop_entry> band_weights[] =
 // APOSTLE_BAND_DEMONS,
 {
     {0, 25, 100, FALL, MONS_CRIMSON_IMP},
-    {0, 25, 100, FALL, MONS_QUASIT},
     {0, 25, 100, FALL, MONS_WHITE_IMP},
     {0, 25, 100, FALL, MONS_UFETUBUS},
     {0, 25, 100, FALL, MONS_IRON_IMP},

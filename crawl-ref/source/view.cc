@@ -921,7 +921,18 @@ string screenshot()
 
 int viewmap_flash_colour()
 {
-    return _layers & LAYERS_ALL && you.berserk() ? RED : BLACK;
+    colour_t status = BLACK;
+
+    if (you.berserk())
+        status = RED;
+    else if (you.paralysed())
+        status = LIGHTBLUE;
+    else if (you.petrified())
+        status = LIGHTGRAY;
+
+    // This only shows the fullscreen colour when we're showing all layers,
+    // and hides it for parseability's sake when toggling individual layers.
+    return (_layers & LAYERS_ALL) ? status : BLACK;
 }
 
 // Updates one square of the view area. Should only be called for square
