@@ -1451,7 +1451,7 @@ string spell_uselessness_reason(spell_type spell, bool temp, bool prevent,
     case SPELL_AWAKEN_ARMOUR:
         if (!you_can_wear(SLOT_BODY_ARMOUR, temp))
             return "you cannot wear body armour.";
-        if (temp && !you.equipment.get_slot_items(SLOT_BODY_ARMOUR).empty())
+        if (temp && !you.body_armour())
             return "you have no body armour to summon the spirit of.";
         break;
 
@@ -1648,7 +1648,6 @@ bool spell_no_hostile_in_range(spell_type spell)
     case SPELL_FIRE_STORM:
         return false;
 
-    case SPELL_OLGREBS_TOXIC_RADIANCE:
     case SPELL_IGNITION:
     case SPELL_FROZEN_RAMPARTS:
     case SPELL_FULSOME_FUSILLADE:
@@ -1681,6 +1680,9 @@ bool spell_no_hostile_in_range(spell_type spell)
 
         return true;
     }
+
+    case SPELL_OLGREBS_TOXIC_RADIANCE:
+        return cast_toxic_radiance(&you, pow, false, true) == spret::abort;
 
     case SPELL_IGNITE_POISON:
         return cast_ignite_poison(&you, -1, false, true) == spret::abort;

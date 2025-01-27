@@ -891,11 +891,12 @@ static const vector<random_pick_entry<monster_type>> _xom_summons =
   { 16, 22,  10, SEMI, MONS_BUNYIP },
   { 16, 23,  50, SEMI, MONS_RADROACH },
   { 16, 25,  75, SEMI, MONS_VERY_UGLY_THING },
+  { 16, 24,  25, SEMI, MONS_SPHINX_MARAUDER },
   { 17, 24,  35, SEMI, MONS_GLOWING_ORANGE_BRAIN },
-  { 17, 25,  50, SEMI, MONS_SPHINX },
   { 17, 33,  35, SEMI, MONS_SHADOW_DEMON },
   { 17, 33,  65, SEMI, MONS_SIN_BEAST },
   { 17, 33,  15, SEMI, MONS_CACODEMON },
+  { 18, 25,  50, SEMI, MONS_GUARDIAN_SPHINX },
   { 18, 33,  35, SEMI, MONS_REAPER },
   { 18, 24,  30, SEMI, MONS_DANCING_WEAPON },
   { 19, 26,   1, FLAT, MONS_ORANGE_STATUE },
@@ -2770,7 +2771,7 @@ static void _xom_hyper_enchant_monster(int sever)
                                      ENCH_EMPOWERED_SPELLS, ENCH_REPEL_MISSILES,
                                      ENCH_RESISTANCE, ENCH_REGENERATION,
                                      ENCH_STRONG_WILLED, ENCH_TOXIC_RADIANCE,
-                                     ENCH_DOUBLED_VIGOUR, ENCH_MIRROR_DAMAGE,
+                                     ENCH_DOUBLED_HEALTH, ENCH_MIRROR_DAMAGE,
                                      ENCH_SWIFT };
     vector<monster*> targetable = _xom_find_weak_monsters(true);
     int time = random_range(200, 200 + sever * 2);
@@ -3159,6 +3160,8 @@ static void _xom_pseudo_miscast(int /*sever*/)
             str = _get_xom_speech("feature deep water");
         else if (in_view[iv] == DNGN_FOUNTAIN_BLOOD)
             str = _get_xom_speech("feature blood");
+        else if (in_view[iv] == DNGN_FOUNTAIN_EYES)
+            str = _get_xom_speech("feature eyes");
         else if (in_view[iv] == DNGN_DRY_FOUNTAIN)
             str = _get_xom_speech("feature dry");
         else if (feat_is_statuelike(in_view[iv]))

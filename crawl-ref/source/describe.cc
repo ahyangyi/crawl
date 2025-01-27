@@ -872,21 +872,25 @@ static string _artefact_descrip(const item_def &item)
 static const char *trap_names[] =
 {
 #if TAG_MAJOR_VERSION == 34
-    "dart", "arrow", "spear",
+    "harlequin's", "archmage's", "spear",
 #endif
 #if TAG_MAJOR_VERSION > 34
+    "tyrant's",
+    "archmage's",
+    "harlequin's",
+    "devourer's",
     "dispersal",
     "teleport",
 #endif
     "permanent teleport",
     "alarm",
 #if TAG_MAJOR_VERSION == 34
-    "blade", "bolt",
+    "tyrant's", "bolt",
 #endif
     "net",
     "Zot",
 #if TAG_MAJOR_VERSION == 34
-    "needle",
+    "devourer's",
 #endif
     "shaft",
     "passage",

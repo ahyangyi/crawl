@@ -1616,6 +1616,7 @@ bool monster::pickup_armour(item_def &item, bool msg, bool force)
         if (base_type == MONS_MAURICE
             || base_type == MONS_NIKOLA
             || base_type == MONS_CRAZY_YIUF
+            || genus == MONS_SPHINX
             || genus == MONS_DRACONIAN)
         {
             slot = SLOT_BODY_ARMOUR;
@@ -2377,7 +2378,7 @@ string monster::foot_name(bool plural, bool *can_plural) const
             str = "hoof";
         else if (ch == 'H')
         {
-            if (type == MONS_MANTICORE || type == MONS_SPHINX)
+            if (type == MONS_MANTICORE || mons_genus(type) == MONS_SPHINX)
                 str = "paw";
             else
                 str = "talon";
@@ -3488,7 +3489,9 @@ int monster::known_chaos(bool check_spells_god) const
         chaotic++;
     }
 
-    if (has_attack_flavour(AF_CHAOTIC))
+    // No kiting monsters over to harlequin traps for silver vulnerability.
+    // It's a temporary affliction, anyway.
+    if (has_attack_flavour(AF_CHAOTIC) && !(has_ench(ENCH_CHAOS_LACE)))
         chaotic++;
 
     if (is_chaotic_god(god))
@@ -4399,6 +4402,17 @@ bool monster::fully_petrify(bool quiet)
 
     add_ench(ENCH_PETRIFIED);
     return msg;
+}
+
+bool monster::vex(const actor *who, int duration, string /* source */)
+{
+    if (clarity() || has_ench(ENCH_VEXED))
+        return false;
+
+    simple_monster_message(*this, " is overwhelmed by frustration!");
+    add_ench(mon_enchant(ENCH_VEXED, 0, who, duration * BASELINE_DELAY));
+
+    return true;
 }
 
 void monster::slow_down(actor *atk, int strength)

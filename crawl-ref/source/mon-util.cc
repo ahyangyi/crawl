@@ -2012,6 +2012,8 @@ mon_attack_def mons_attack_spec(const monster& m, int attk_number,
     {
         if (m.has_ench(ENCH_FIRE_CHAMPION))
             attk.flavour = AF_FIRE;
+        else if (m.has_ench(ENCH_CHAOS_LACE))
+            attk.flavour = AF_CHAOTIC;
 
         if (mon.type == MONS_PLAYER_SHADOW)
         {
@@ -2286,7 +2288,7 @@ int flavour_damage(attack_flavour flavour, int HD, bool random)
             return 12;
         // Just show max damage: this number's only used for display.
         case AF_AIRSTRIKE:
-            return pow(HD + 1, 1.33) * 11 / 6;
+            return pow(HD + 1, 1.2) * 12 / 6;
         default:
             return 0;
     }
@@ -2469,7 +2471,7 @@ int exper_value(const monster& mon, bool real, bool legacy)
         if (mon.has_ench(ENCH_BERSERK))
             maxhp = (maxhp * 2 + 1) / 3;
 
-        if (mon.has_ench(ENCH_DOUBLED_VIGOUR))
+        if (mon.has_ench(ENCH_DOUBLED_HEALTH))
             maxhp = maxhp / 2;
     }
     else
@@ -2541,6 +2543,7 @@ int exper_value(const monster& mon, bool real, bool legacy)
             case SPELL_PHANTOM_BLITZ:
             case SPELL_BLINK_RANGE:
             case SPELL_PETRIFY:
+            case SPELL_VEX:
                 diff += 20;
                 break;
 
@@ -3578,18 +3581,9 @@ bool mons_is_removed(monster_type mc)
     return mc != MONS_PROGRAM_BUG && mons_species(mc) == MONS_PROGRAM_BUG;
 }
 
-bool mons_looks_stabbable(const monster& m)
-{
-    const stab_type st = find_stab_type(&you, m, false);
-    return stab_bonus_denom(st) == 1; // top-tier stab
-}
-
 bool mons_looks_distracted(const monster& m)
 {
-    const stab_type st = find_stab_type(&you, m, false);
-    return !m.friendly()
-           && st != STAB_NO_STAB
-           && !mons_looks_stabbable(m);
+    return m.foe != MHITYOU && m.behaviour != BEH_BATTY && !m.friendly();
 }
 
 void mons_start_fleeing_from_sanctuary(monster& mons)
@@ -3699,7 +3693,7 @@ static bool _beneficial_beam_flavour(beam_type flavour)
     {
     case BEAM_HASTE:
     case BEAM_HEALING:
-    case BEAM_DOUBLE_VIGOUR:
+    case BEAM_DOUBLE_HEALTH:
     case BEAM_INVISIBILITY:
     case BEAM_MIGHT:
     case BEAM_AGILITY:

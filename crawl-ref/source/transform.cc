@@ -1683,6 +1683,11 @@ static void _enter_form(int pow, transformation which_trans)
     if (you.has_innate_mutation(MUT_MERTAIL))
         merfolk_check_swimming(env.grid(you.pos()), false);
 
+    // In the case where we didn't actually meld any gear (but possibly used
+    // a new artefact talisman or were forcibly polymorphed away from one),
+    // refresh equipment properties.
+    you.equipment.update();
+
     // Update skill boosts for the current state of equipment melds
     // Must happen before the HP check!
     ash_check_bondage();
@@ -1799,6 +1804,10 @@ void untransform(bool skip_move)
     if (you.fishtail)
         you.equipment.meld_equipment(1 << SLOT_BOOTS);
 
+    // Update regarding talisman properties, just in case we didn't actually
+    // meld or unmeld anything.
+    you.equipment.update();
+
     if (old_form == transformation::death)
     {
         _print_death_brand_changes(you.weapon(), false);
@@ -1820,6 +1829,10 @@ void untransform(bool skip_move)
     // Update skill boosts for the current state of equipment melds
     // Must happen before the HP check!
     ash_check_bondage();
+
+    // Not necessary for proper functioning, but printing a message feels appropriate.
+    if (get_form(old_form)->forbids_flight() && you.airborne())
+        float_player();
 
     if (!skip_move)
     {
@@ -1983,6 +1996,12 @@ void set_default_form(transformation t, const item_def *source)
     // talisman might count as a useless item (the you.form != you.default_form
     // check in cannot_evoke_item_reason)
     you.default_form = t;
+
+    // If we're swapping to a different talisman of the same type, while in that
+    // form aready, we will have skipped most of the equipment handling code,
+    // so be sure to update for any artprop changes.
+    if (you.form == t)
+        you.equipment.update();
 }
 
 void vampire_update_transformations()

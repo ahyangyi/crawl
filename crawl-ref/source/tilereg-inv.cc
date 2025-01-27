@@ -508,7 +508,7 @@ static void _fill_item_info(InventoryTile &desc, const item_def &item)
         // -1 specifies don't display anything
         desc.quantity = (item.quantity == 1) ? -1 : item.quantity;
     }
-    else if (type == OBJ_WANDS && item.flags & ISFLAG_IDENTIFIED)
+    else if (type == OBJ_WANDS && item.is_identified())
         desc.quantity = item.charges;
     else
         desc.quantity = -1;
@@ -595,6 +595,16 @@ void InventoryRegion::update()
                         desc.flag |= TILEI_FLAG_MELDED;
                     break;
                 }
+            }
+
+            // Mark our activate talisman as though it were equipped (at least
+            // as long as it's in our inventory).
+            if (you.inv[i].base_type == OBJ_TALISMANS
+                && you.using_talisman(you.inv[i]))
+            {
+                desc.flag |= TILEI_FLAG_EQUIP;
+                if (you.form != you.default_form)
+                    desc.flag |= TILEI_FLAG_MELDED;
             }
 
             inv_shown[i] = true;

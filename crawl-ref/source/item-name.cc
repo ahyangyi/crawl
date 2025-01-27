@@ -1943,6 +1943,10 @@ bool item_type_known(const item_def& item)
     case OBJ_GOLD:
     case OBJ_RUNES:
     case OBJ_GEMS:
+#if TAG_MAJOR_VERSION == 34
+    case OBJ_FOOD:
+    case OBJ_RODS:
+#endif
         return true;
     default:
         break;
@@ -3263,7 +3267,7 @@ bool is_useless_item(const item_def &item, bool temp, bool ident)
                 return false;
             }
         }
-        if (item.sub_type == ARM_ORB && (ident || item_type_known(item)))
+        if (item.sub_type == ARM_ORB && (ident || item.is_identified()))
         {
             special_armour_type ego = get_armour_ego_type(item);
             switch (ego)

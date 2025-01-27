@@ -3511,8 +3511,8 @@ int player::infusion_amount() const
     int cost = 0;
     if (you.unrand_equipped(UNRAND_POWER_GLOVES))
         cost = you.has_mutation(MUT_HP_CASTING) ? 0 : 999;
-    else if (wearing_ego(OBJ_ARMOUR, SPARM_INFUSION))
-        cost = 1;
+    else
+        cost = wearing_ego(OBJ_ARMOUR, SPARM_INFUSION);
 
     if (you.has_mutation(MUT_HP_CASTING))
         return min(you.hp - 1, cost);
@@ -7020,9 +7020,9 @@ void player::paralyse(const actor *who, int str, string source)
 
     // The who check has an effect in a few cases, most notably making
     // Death's Door + Borg's paralysis unblockable.
-    if (who && (duration[DUR_PARALYSIS] || duration[DUR_PARALYSIS_IMMUNITY]))
+    if (who && (duration[DUR_PARALYSIS] || duration[DUR_STUN_IMMUNITY]))
     {
-        mpr("You shrug off the repeated paralysis!");
+        mpr("You shrug off the repeated attempt to disable you.");
         return;
     }
 
@@ -7036,9 +7036,11 @@ void player::paralyse(const actor *who, int str, string source)
     {
         take_note(Note(NOTE_PARALYSIS, str, 0, source));
         // use the real name here even for invisible monsters
-        props[PARALYSED_BY_KEY] = use_actor_name ? who->name(DESC_A, true)
+        props[DISABLED_BY_KEY] = use_actor_name ? who->name(DESC_A, true)
                                                : source;
     }
+    else
+        props.erase(DISABLED_BY_KEY);
 
     if (asleep())
         you.awaken();
@@ -7088,7 +7090,9 @@ void player::petrify(const actor *who, bool force)
     duration[DUR_PETRIFYING] = 3 * BASELINE_DELAY;
 
     if (who)
-        props[PETRIFIED_BY_KEY] = who->name(DESC_A, true);
+        props[DISABLED_BY_KEY] = who->name(DESC_A, true);
+    else
+        props.erase(DISABLED_BY_KEY);
 
     redraw_evasion = true;
     mprf(MSGCH_WARN, "You are slowing down.");
@@ -7107,6 +7111,58 @@ bool player::fully_petrify(bool /*quiet*/)
     stop_channelling_spells();
 
     return true;
+}
+
+bool player::vex(const actor* who, int dur, string source)
+{
+    if (you.clarity())
+    {
+        mprf("Your clarity prevents you from becoming vexed.");
+        return false;
+    }
+    else if (duration[DUR_STUN_IMMUNITY])
+    {
+        mpr("You shrug off the repeated attempt to disable you.");
+        return false;
+    }
+    else if (you.duration[DUR_VEXED])
+        return false;
+
+    mprf(MSGCH_WARN, "You feel overwhelmed by frustration!");
+    you.duration[DUR_VEXED] = dur * BASELINE_DELAY;
+
+    int &vex(duration[DUR_VEXED]);
+
+    const bool use_actor_name = source.empty() && who != nullptr;
+    if (use_actor_name)
+        source = who->name(DESC_A);
+
+    if (!vex && !source.empty())
+    {
+        take_note(Note(NOTE_VEXED, dur, 0, source));
+        props[DISABLED_BY_KEY] = use_actor_name ? who->name(DESC_A, true)
+                                               : source;
+    }
+    else
+        props.erase(DISABLED_BY_KEY);
+
+    stop_delay(true, true);
+    stop_directly_constricting_all(false);
+    stop_channelling_spells();
+
+    return true;
+}
+
+void player::give_stun_immunity(int dur)
+{
+    const int immunity = dur * BASELINE_DELAY;
+    duration[DUR_STUN_IMMUNITY] = immunity;
+    if (you.petrified())
+    {
+        // no chain paralysis + petrification combos!
+        duration[DUR_STUN_IMMUNITY] += duration[DUR_PETRIFIED];
+        return;
+    }
 }
 
 void player::slow_down(actor */*foe*/, int str)
@@ -7574,7 +7630,7 @@ bool player::can_smell() const
 
 bool player::can_sleep(bool holi_only) const
 {
-    return !you.duration[DUR_SLEEP_IMMUNITY]
+    return !you.duration[DUR_STUN_IMMUNITY]
            && actor::can_sleep(holi_only)
            && !(you.form == transformation::fungus)
            && !(you.form == transformation::tree);
@@ -7583,12 +7639,13 @@ bool player::can_sleep(bool holi_only) const
 /**
  * Attempts to put the player to sleep.
  *
+ * @param source    The actor that put the player to sleep (if any).
  * @param power     The power of the effect putting the player to sleep.
  * @param hibernate Whether the player is being put to sleep by 'ensorcelled
  *                  hibernation' (doesn't affect characters with rC, ignores
  *                  power), or by a normal sleep effect.
  */
-void player::put_to_sleep(actor*, int power, bool hibernate)
+void player::put_to_sleep(actor* source, int power, bool hibernate)
 {
     ASSERT(!crawl_state.game_is_arena());
 
@@ -7599,9 +7656,9 @@ void player::put_to_sleep(actor*, int power, bool hibernate)
         return;
     }
 
-    if (duration[DUR_SLEEP_IMMUNITY])
+    if (duration[DUR_STUN_IMMUNITY])
     {
-        mpr("You can't fall asleep again this soon!");
+        mpr("You shrug off repeated attempt to disable you.");
         return;
     }
 
@@ -7612,6 +7669,11 @@ void player::put_to_sleep(actor*, int power, bool hibernate)
         mpr("You can't fall asleep in your current state!");
         return;
     }
+
+    if (source)
+        props[DISABLED_BY_KEY] = source->name(DESC_A, true).c_str();
+    else
+        props.erase(DISABLED_BY_KEY);
 
     mpr("You fall asleep.");
     _pruneify();
@@ -7634,7 +7696,7 @@ void player::awaken()
     ASSERT(!crawl_state.game_is_arena());
 
     duration[DUR_SLEEP] = 0;
-    set_duration(DUR_SLEEP_IMMUNITY, random_range(3, 5));
+    give_stun_immunity(random_range(3, 5));
     mpr("You wake up.");
     flash_view(UA_MONSTER, BLACK);
     redraw_armour_class = true;

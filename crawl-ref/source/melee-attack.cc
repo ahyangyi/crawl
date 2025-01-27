@@ -73,7 +73,7 @@ melee_attack::melee_attack(actor *attk, actor *defn,
     attack_number(attack_num), effective_attack_number(effective_attack_num),
     cleaving(false), is_multihit(false), is_riposte(false),
     is_projected(false), charge_pow(0), never_cleave(false), dmg_mult(0),
-    flat_dmg_bonus(0),
+    flat_dmg_bonus(0), never_prompt(false),
     wu_jian_attack(WU_JIAN_ATTACK_NONE),
     wu_jian_number_of_targets(1),
     is_shadow_stab(false)
@@ -156,7 +156,7 @@ bool melee_attack::handle_phase_attempted()
         return false;
     }
 
-    if (bad_attempt())
+    if (!never_prompt && bad_attempt())
     {
         cancel_attack = true;
         return false;
@@ -1307,7 +1307,7 @@ bool melee_attack::attack()
     if (attacker->is_player() && attacker != defender)
     {
         set_attack_conducts(conducts, *defender->as_monster(),
-                            you.can_see(*defender));
+                            you.can_see(*defender) && !you.duration[DUR_VEXED]);
 
         if (player_under_penance(GOD_ELYVILON)
             && god_hates_your_god(GOD_ELYVILON)
@@ -3778,14 +3778,18 @@ void melee_attack::mons_apply_attack_flavour()
 
     case AF_AIRSTRIKE:
         const int spaces = airstrike_space_around(defender->pos(), true);
-        const int min = pow(attacker->get_hit_dice(), 1.33) * (spaces + 3) / 6;
-        const int max = pow(attacker->get_hit_dice() + 1, 1.33) * (spaces + 3) / 6;
+        const int min = pow(attacker->get_hit_dice(), 1.2) * (spaces + 3) / 6;
+        const int max = pow(attacker->get_hit_dice() + 1, 1.2) * (spaces + 4) / 6;
         special_damage = defender->apply_ac(random_range(min, max), 0);
 
         if (needs_message && special_damage)
         {
+            // XXX: VFX during regular melee is distracting, but players not
+            // respecting the mechanic will get quite bodied. Hrm.
+            tileidx_t generic = TILE_BOLT_DEFAULT_WHITE;
+
             mprf("%s and strikes %s%s",
-                 airstrike_intensity_line(spaces).c_str(),
+                 airstrike_intensity_display(spaces, generic).c_str(),
                  defender->name(DESC_THE).c_str(),
                  attack_strength_punctuation(special_damage).c_str());
         }

@@ -141,7 +141,7 @@ int count = 0;
         if (you.has_mutation(MUT_QUADRUMANOUS))
             ++count;
 
-        if (player_size == SIZE_TINY)
+        if (player_size <= SIZE_LITTLE)
             NO_SLOT(make_stringf("Those are too big for your %s.", you.hand_name(true).c_str()))
         else if (player_size >= SIZE_LARGE)
             NO_SLOT(make_stringf("Those are too small for your %s.", you.hand_name(true).c_str()))
@@ -159,10 +159,10 @@ int count = 0;
     case SLOT_BOOTS:
         if (species::wears_barding(you.species))
             NO_SLOT("You don't have any feet!")
-        else if (player_size == SIZE_TINY)
-            NO_SLOT(make_stringf("Those are too big for your %s.", you.hand_name(true).c_str()))
+        else if (player_size <= SIZE_LITTLE)
+            NO_SLOT(make_stringf("Those are too big for your %s.", you.foot_name(true).c_str()))
         else if (player_size >= SIZE_LARGE)
-            NO_SLOT(make_stringf("Those are too small for your %s.", you.hand_name(true).c_str()))
+            NO_SLOT(make_stringf("Those are too small for your %s.", you.foot_name(true).c_str()))
         else if (you.species == SP_OCTOPODE || you.has_mutation(MUT_NO_ARMOUR))
             NO_SLOT("You can't wear boots.")
         else if (you.get_mutation_level(MUT_HOOVES, mutation_activity_type::INACTIVE) >= 3)
@@ -277,7 +277,7 @@ const static vector<equipment_slot> _flex_slots[] =
 
 static const vector<equipment_slot>& _get_alternate_slots(equipment_slot slot)
 {
-    ASSERT(slot < END_OF_SLOTS && slot > SLOT_UNUSED);
+    ASSERT(slot < END_OF_SLOTS && slot >= SLOT_UNUSED);
     return _flex_slots[slot];
 }
 
@@ -302,13 +302,22 @@ int player_equip_set::wearing_ego(object_class_type obj_type, int ego) const
         item_def& item = you.inv[entry.item];
         if (item.base_type == obj_type)
         {
-            if (obj_type == OBJ_WEAPONS)
+            switch (obj_type)
             {
-                if (get_weapon_brand(item) == ego)
-                    ++total;
+                case OBJ_WEAPONS:
+                    if (get_weapon_brand(item) == ego)
+                        ++total;
+                    break;
+
+                case OBJ_ARMOUR:
+                    if (get_armour_ego_type(item) == ego)
+                        ++total;
+                    break;
+
+                default:
+                    if (item.brand == ego)
+                        ++total;
             }
-            else if (item.brand == ego)
-                ++total;
         }
     }
 
@@ -521,7 +530,8 @@ void player_equip_set::update()
         }
     }
 
-    if (you.active_talisman.defined() && is_artefact(you.active_talisman))
+    if (you.active_talisman.defined() && is_artefact(you.active_talisman)
+        && you.form == you.default_form)
     {
         artefact_properties(you.active_talisman, artprops);
 
@@ -1287,7 +1297,7 @@ bool player_equip_set::slot_is_fully_covered(equipment_slot slot) const
     if (num_slots[slot] == 0 || slot_is_melded(slot))
         return false;
 
-    return (int)get_slot_entries(slot).size() < num_slots[slot];
+    return (int)get_slot_entries(slot).size() == num_slots[slot];
 }
 
 /**
@@ -1941,6 +1951,15 @@ static void _zonguldrok_comment_on_hat(const item_def& hat)
     else
         key = "zonguldrok hat bad";
 
+    if (is_unrandom_artefact(hat))
+    {
+        const unrandart_entry *entry = get_unrand_entry(hat.unrand_idx);
+        string unrand_key = "zonguldrok hat " + string(entry->name);
+
+        if (!getSpeakString(unrand_key).empty())
+            key = unrand_key;
+    }
+
     const string msg = "A voice whispers, \"" + getSpeakString(key) + "\"";
         mprf(MSGCH_TALK, "%s", msg.c_str());
 }
@@ -2245,9 +2264,7 @@ static void _handle_regen_item_equip(const item_def& item)
     string item_name = is_artefact(item) ? get_artefact_name(item)
                                          : eq_slot == SLOT_AMULET
                                          ? "amulet"
-                                         : eq_slot == SLOT_BODY_ARMOUR
-                                         ? "armour"
-                                         : equip_slot_name(eq_slot);
+                                         : lowercase_string(equip_slot_name(eq_slot, true));
 
 #if TAG_MAJOR_VERSION == 34
     if (regen_hp && !regen_mp && you.get_mutation_level(MUT_NO_REGENERATION))

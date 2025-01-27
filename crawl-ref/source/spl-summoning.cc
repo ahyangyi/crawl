@@ -255,7 +255,7 @@ spret cast_awaken_armour(int pow, bool fail)
         return spret::success;
     }
 
-    mprf("You draw out an echo of %s", armour->name(DESC_YOUR).c_str());
+    mprf("You draw out an echo of %s.", armour->name(DESC_YOUR).c_str());
 
     item_def &fake_armour = env.item[mitm_slot];
     fake_armour.clear();
@@ -296,7 +296,7 @@ spret cast_monstrous_menagerie(actor* caster, int pow, bool fail)
     monster_type type = MONS_PROGRAM_BUG;
 
     if (random2(pow) > 60 && coinflip())
-        type = MONS_SPHINX;
+        type = MONS_GUARDIAN_SPHINX;
     else
         type = coinflip() ? MONS_MANTICORE : MONS_LINDWURM;
 
@@ -763,7 +763,7 @@ static void _animate_weapon(int pow, actor* target)
                  target->pos(),
                  hostile ? MHITYOU : target->mindex(),
                  hostile ? MG_NONE : MG_FORCE_BEH);
-    mg.set_summoned(&you, SPELL_TUKIMAS_DANCE, summ_dur(dur));
+    mg.set_summoned(&you, SPELL_TUKIMAS_DANCE, summ_dur(dur), false);
     mg.set_range(1, 2);
     mg.props[TUKIMA_WEAPON] = *wpn;
     mg.props[TUKIMA_POWER] = pow;
